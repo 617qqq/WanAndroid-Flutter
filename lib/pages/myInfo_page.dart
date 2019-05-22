@@ -6,6 +6,7 @@ import 'package:wanAndroid/pages/about_us_page.dart';
 import 'package:wanAndroid/pages/collect_list_page.dart';
 import 'package:wanAndroid/pages/login_page.dart';
 import 'package:wanAndroid/util/DataUtils.dart';
+import 'build_page.dart';
 
 class MyInfoPage extends StatefulWidget {
   @override
@@ -57,7 +58,7 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
         await DataUtils.isLogin().then((isLogin) {
           if (!isLogin) {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return LoginPage();
+              return BuildPage();
             }));
           } else {
             print('已登录!');
