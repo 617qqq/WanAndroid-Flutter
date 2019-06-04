@@ -5,6 +5,9 @@ import 'package:wanAndroid/event/login_event.dart';
 import 'package:wanAndroid/pages/about_us_page.dart';
 import 'package:wanAndroid/pages/collect_list_page.dart';
 import 'package:wanAndroid/pages/login_page.dart';
+import 'package:wanAndroid/pages/refresh_page.dart';
+import 'package:wanAndroid/pages/animate_page.dart';
+import 'package:wanAndroid/practice/animation_hero.dart';
 import 'package:wanAndroid/util/DataUtils.dart';
 import 'build_page.dart';
 
@@ -40,10 +43,19 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    Widget image = Image.asset(
-      'images/ic_launcher_round.png',
-      width: 100.0,
-      height: 100.0,
+//    Widget image = Center(
+//      child: Container(
+//          width: 100,
+//          height: 100,
+//          decoration: BoxDecoration(
+//              shape: BoxShape.circle,
+//              image: DecorationImage(image: AssetImage('images/bg.png')))),
+//    );
+    Widget image = Center(
+      child: CircleAvatar(
+        radius: 50,
+        backgroundImage: AssetImage('images/bg.png'),
+      ),
     );
 
     Widget raisedButton = RaisedButton(
@@ -57,9 +69,20 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
 
         await DataUtils.isLogin().then((isLogin) {
           if (!isLogin) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return BuildPage();
-            }));
+//            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+//              return BuildPage();
+////            return RefreshPage();
+//            }));
+            Navigator.of(context).push(PageRouteBuilder(
+                transitionDuration: Duration(microseconds: 2000),
+                pageBuilder: (BuildContext context, Animation animation,
+                    Animation secondaryAnimation) {
+                  return new FadeTransition(
+                    opacity: animation,
+//                    child: AnimatePage(),
+                    child: HeroAnimationRoute(),
+                  );
+                }));
           } else {
             print('已登录!');
           }

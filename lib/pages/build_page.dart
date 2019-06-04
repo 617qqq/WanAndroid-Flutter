@@ -8,6 +8,8 @@ class BuildPage extends StatefulWidget {
 }
 
 class BuildPageState extends State<BuildPage> {
+  Row row = new Row();
+
   List tag = [
     "位移",
     "爆发",
@@ -123,6 +125,7 @@ class BuildPageState extends State<BuildPage> {
         padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
         child: ListView(
           children: _buildRow(),
+          physics: new BouncingScrollPhysics(),
         ),
       ),
     );
@@ -131,16 +134,10 @@ class BuildPageState extends State<BuildPage> {
   _buildRow() {
     List widgets = <Widget>[];
     for (int i = 0; i < tag.length; i++) {
-      bool isSelected = selected.contains(i);
-      var button = new Text(tag[i],
-          style: TextStyle(
-            color: isSelected ? Colors.blue : Colors.grey,
-            background: new Paint()
-              ..color = (isSelected ? Colors.white : Colors.black),
-          ));
+//      widgets.add(_buildSubRow(i));
       widgets.add(GestureDetector(
-        child: button,
-        onTap: () {
+        child: _buildSubButton(i),
+        onTap: (){
           setState(() {
             if (selected.contains(i)) {
               selected.remove(i);
@@ -154,5 +151,73 @@ class BuildPageState extends State<BuildPage> {
     return widgets;
   }
 
-  //ListView用button点击会怎样
+  Container _buildSubButton(int i) {
+    bool isSelected = selected.contains(i);
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 2.5, horizontal: 10.0),
+      decoration: BoxDecoration(
+        gradient: isSelected ? _getSelectedGradient() : _getUnSelectedGradient(),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            offset: Offset(2.0, 2.0),
+            blurRadius: 4.0
+          )
+        ]
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        tag[i], style: TextStyle(color: isSelected ? Colors.black : Colors.white),
+      ),
+    );
+  }
+
+  _onClickItem(int i) {
+    setState(() {
+      if (selected.contains(i)) {
+        selected.remove(i);
+      } else {
+        selected.add(i);
+      }
+    });
+  }
+
+  GestureDetector _buildSubRow(int i) {
+    bool isSelected = selected.contains(i);
+    var button = new Text(tag[i],
+        style: TextStyle(
+          color: isSelected ? Colors.blue : Colors.grey,
+          background: new Paint()
+            ..color = (isSelected ? Colors.white : Colors.black),
+        ));
+    return GestureDetector(
+      child: button,
+      onTap: () {
+        setState(() {
+          print("aaaaaaaaaaaaaaaaaaaa");
+          if (selected.contains(i)) {
+            selected.remove(i);
+          } else {
+            selected.add(i);
+          }
+        });
+      },
+    );
+  }
+
+  _getUnSelectedGradient() {
+    return RadialGradient(
+      colors: [Colors.grey, Colors.grey]
+    );
+  }
+
+  _getSelectedGradient() {
+    return RadialGradient(
+      colors: [Colors.blueAccent, Colors.lightBlueAccent],
+      center: Alignment.center,
+      radius: .10
+    );
+  }
+
+//ListView用button点击会怎样
 }

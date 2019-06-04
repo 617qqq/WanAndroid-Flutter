@@ -23,4 +23,6 @@ flutter:
 
   assets:
     - images/ic_launcher_round.png
+    - images/ic_arrow_down.png
+    - images/bg.png
 
