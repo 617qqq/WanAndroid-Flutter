@@ -22,6 +22,7 @@ class EndLine extends StatelessWidget {
     );
   }
 }
+
 class NoData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

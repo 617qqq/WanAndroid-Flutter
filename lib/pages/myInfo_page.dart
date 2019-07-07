@@ -8,6 +8,9 @@ import 'package:wanAndroid/pages/login_page.dart';
 import 'package:wanAndroid/pages/refresh_page.dart';
 import 'package:wanAndroid/pages/animate_page.dart';
 import 'package:wanAndroid/practice/animation_hero.dart';
+import 'package:wanAndroid/practice/animation_stagger.dart';
+import 'package:wanAndroid/practice/practice_list.dart';
+import 'package:wanAndroid/practice/practice_list_test.dart';
 import 'package:wanAndroid/util/DataUtils.dart';
 import 'build_page.dart';
 
@@ -69,20 +72,20 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
 
         await DataUtils.isLogin().then((isLogin) {
           if (!isLogin) {
-//            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return PracticeListPage();
 //              return BuildPage();
-////            return RefreshPage();
-//            }));
-            Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: Duration(microseconds: 2000),
-                pageBuilder: (BuildContext context, Animation animation,
-                    Animation secondaryAnimation) {
-                  return new FadeTransition(
-                    opacity: animation,
-//                    child: AnimatePage(),
-                    child: HeroAnimationRoute(),
-                  );
-                }));
+            }));
+//            Navigator.of(context).push(PageRouteBuilder(
+//                transitionDuration: Duration(microseconds: 2000),
+//                pageBuilder: (BuildContext context, Animation animation,
+//                    Animation secondaryAnimation) {
+//                  return new FadeTransition(
+//                    opacity: animation,
+////                    child: AnimatePage(),
+//                    child: HeroAnimationRoute(),
+//                  );
+//                }));
           } else {
             print('已登录!');
           }
@@ -93,8 +96,7 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
     Widget listLike = ListTile(
         leading: const Icon(Icons.favorite),
         title: const Text('喜欢的文章'),
-        trailing:
-            Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+        trailing: Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
         onTap: () async {
           await DataUtils.isLogin().then((isLogin) {
             if (isLogin) {
@@ -113,8 +115,7 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
     Widget listAbout = ListTile(
         leading: const Icon(Icons.info),
         title: const Text('关于我们'),
-        trailing:
-            Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+        trailing: Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return AboutUsPage();
@@ -124,8 +125,7 @@ class MyInfoPageState extends State<MyInfoPage> with WidgetsBindingObserver {
     Widget listLogout = ListTile(
         leading: const Icon(Icons.info),
         title: const Text('退出登录'),
-        trailing:
-            Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+        trailing: Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
         onTap: () async {
           DataUtils.clearLoginInfo();
           setState(() {

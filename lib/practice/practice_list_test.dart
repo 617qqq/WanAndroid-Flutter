@@ -3,16 +3,15 @@ import 'package:wanAndroid/pages/build_page.dart';
 
 import 'animation_hero.dart';
 import 'animation_stagger.dart';
-import 'chat_page.dart';
 
-class PracticeListPage extends StatefulWidget {
+class PracticeListTestPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new PracticeListPageState();
+    return new PracticeListTestPageState();
   }
 }
 
-class PracticeListPageState extends State<PracticeListPage> {
+class PracticeListTestPageState extends State<PracticeListTestPage> {
   List page = new List();
 
   int downIndex = -1;
@@ -21,16 +20,15 @@ class PracticeListPageState extends State<PracticeListPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    page.add(HeroAnimationRoute);
-    page.add(StaggerAnimationDemo);
-    page.add(ChatPage);
     page.add(BuildPage);
+    page.add(HeroAnimationRoute);
+    page.add(StaggerAnimationWeight);
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: page.length,
+        itemCount: 3,
         itemBuilder: (BuildContext context, int index) {
           return buildItem(index);
         });
@@ -46,19 +44,17 @@ class PracticeListPageState extends State<PracticeListPage> {
       onPointerUp: (PointerUpEvent event) {
         if (index == downIndex) {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            switch (index) {
-              case 0:
-                return HeroAnimationRoute();
-              case 1:
-                return StaggerAnimationDemo();
-              case 2:
-                return ChatPage();
-              default:
-                return BuildPage();
-            }
+            return page[index];
           }));
         }
       },
+    );
+  }
+
+  Widget buildItemTest(int index) {
+    return Container(
+      color: downIndex == index ? Colors.grey : Colors.white,
+      child: Text(index.toString()),
     );
   }
 }

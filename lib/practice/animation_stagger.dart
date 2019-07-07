@@ -8,7 +8,7 @@ class StaggerAnimationWeight extends StatelessWidget {
 
   StaggerAnimationWeight({Key key, this.controller}) : super(key: key) {
     height = new Tween(
-      begin: .0,
+      begin: 100.0,
       end: 300.0,
     ).animate(CurvedAnimation(
         parent: controller, curve: Interval(.0, 0.6, curve: Curves.ease)));
@@ -19,7 +19,7 @@ class StaggerAnimationWeight extends StatelessWidget {
 
     padding = new Tween(
       begin: 0.0,
-      end: 100,
+      end: 100.0,
     ).animate(CurvedAnimation(
         parent: controller, curve: Interval(0.6, 1.0, curve: Curves.ease)));
   }
@@ -34,6 +34,7 @@ class StaggerAnimationWeight extends StatelessWidget {
 
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Container(
+      alignment: Alignment.bottomCenter,
       padding: EdgeInsets.only(left: padding.value),
       child: Container(
         height: height.value,

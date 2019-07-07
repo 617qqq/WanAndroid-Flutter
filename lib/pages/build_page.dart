@@ -117,18 +117,29 @@ class BuildPageState extends State<BuildPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('登录'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
-        child: ListView(
-          children: _buildRow(),
-          physics: new BouncingScrollPhysics(),
-        ),
-      ),
-    );
+//    return Scaffold(
+//      appBar: AppBar(
+//        title: Text('登录'),
+//      ),
+//      body: Padding(
+//        padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 0.0),
+//        child: ListView(
+//          children: _buildRow(),
+//          physics: new BouncingScrollPhysics(),
+//        ),
+//      ),
+//    );
+  return buildTest();
+  }
+  
+  /// 测试ListView.Builder
+  Widget buildTest(){
+    return ListView.builder(itemBuilder: (BuildContext buildContext, int index){
+      return  Container(
+        color: Colors.white,
+        child: Text(index.toString()),
+      );
+    });
   }
 
   _buildRow() {
