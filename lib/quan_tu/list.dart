@@ -25,6 +25,12 @@ class ListPageState extends State<ListPage> {
     return buildList();
   }
 
+  double mImgHeight;
+
+  void initState() {
+    super.initState();
+  }
+
   Widget buildList() {
     return ListView.builder(
         scrollDirection: Axis.vertical,
@@ -35,6 +41,9 @@ class ListPageState extends State<ListPage> {
   }
 
   Widget buildRow(BuildContext listContext, int listIndex) {
+    if(mImgHeight == 0){
+      mImgHeight = MediaQuery.of(context).size.width*7/5;
+    }
     return Column(
       children: <Widget>[
         Flex(
@@ -44,21 +53,21 @@ class ListPageState extends State<ListPage> {
               flex: 1,
               child: Image(
                 image: NetworkImage("http://d.quantuwang.co/2019/06/29/16970/1.jpg"),
-                height: 300,
+                height: mImgHeight,
               ),
             ),
             Expanded(
               flex: 1,
               child: Image(
                 image: NetworkImage("http://d.quantuwang.co/2019/06/29/16970/1.jpg"),
-                height: 300,
+                height: mImgHeight,
               ),
             ),
             Expanded(
               flex: 1,
               child: Image(
                 image: NetworkImage("http://d.quantuwang.co/2019/06/29/16970/1.jpg"),
-                height: 300,
+                height: mImgHeight,
               ),
             ),
           ],
