@@ -19,31 +19,49 @@ class ListPage extends StatefulWidget {
   }
 }
 
-class ListPageState extends State<ListPage> {
+class ListPageState extends State<ListPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return buildList();
   }
 
   double mImgHeight;
+  AnimationController controller;
+  Animation growHeight, reduceHeight;
+  int mSelectedColumn = -1, mSelectedLastColumn = -1, mSelectedRow = -1;
 
   void initState() {
     super.initState();
+    controller = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
   Widget buildList() {
     mImgHeight = MediaQuery.of(context).size.width * 7 / 15;
+    growHeight = new Tween(
+      begin: 0.0,
+      end: mImgHeight,
+    ).animate(CurvedAnimation(parent: controller, curve: Interval(.0, 0.6, curve: Curves.ease)))
+      ..addListener(() {
+        setState(() {});
+      });
+    reduceHeight = new Tween(
+      begin: mImgHeight,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Interval(.0, 0.6, curve: Curves.ease)))
+      ..addListener(() {
+        setState(() {});
+      });
     return ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: 10,
         itemBuilder: (BuildContext listContext, int listIndex) {
-          return buildRow(listContext, listIndex);
+          return buildRowItem(listContext, listIndex);
         });
   }
 
-  Widget buildRow(BuildContext listContext, int listIndex) {
-    if(listIndex == 0){
-      return Text(mImgHeight.toString());
+  Widget buildRowItem(BuildContext listContext, int listIndex) {
+    if (listIndex == 0) {
+      return Text(mSelectedColumn.toString());
     }
     return Column(
       children: <Widget>[
@@ -54,9 +72,19 @@ class ListPageState extends State<ListPage> {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Image(
-                  image: NetworkImage(getRootImgUrl(listIndex, 0)),
-                  height: mImgHeight,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() async {
+                      mSelectedLastColumn = mSelectedColumn;
+                      mSelectedColumn = listIndex;
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: Image(
+                    image: NetworkImage(getRootImgUrl(listIndex, 0)),
+                    height: mImgHeight,
+                  ),
                 ),
               ),
               Expanded(
@@ -76,21 +104,27 @@ class ListPageState extends State<ListPage> {
             ],
           ),
         ),
-        Container(
-          height: mImgHeight,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 60,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext rowListContext, int rowIndex) {
-                return buildRowList(rowListContext, rowIndex, listIndex);
-              }),
-        )
+        buildSubList(listIndex)
       ],
     );
   }
 
-  Widget buildRowList(BuildContext rowListContext, int rowIndex, int listIndex) {
+  Widget buildSubList(int listIndex) {
+    return Container(
+      height: mSelectedColumn == listIndex
+          ? growHeight.value
+          : mSelectedLastColumn == listIndex ? reduceHeight.value : 0,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 60,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext rowListContext, int rowIndex) {
+            return buildRowListItem(rowListContext, rowIndex, listIndex);
+          }),
+    );
+  }
+
+  Widget buildRowListItem(BuildContext rowListContext, int rowIndex, int listIndex) {
     if (mImgHeight == null) {
       mImgHeight = MediaQuery.of(context).size.width * 7 / 5;
     }
@@ -102,9 +136,14 @@ class ListPageState extends State<ListPage> {
     );
   }
 
+  dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   String getUrl(int rowIndex, int listIndex) {
     //return mUrl.substring(0, mUrl.indexOf("0.jpg")) + rowIndex.toString() + ".jpg";
-    return mUrl;
+    return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1562580250520&di=e42c739f247e09f397ec4ffab4cd99fe&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201702%2F05%2F20170205213415_u2Bty.jpeg";
   }
 
   String getRootImgUrl(int listIndex, int i) {
