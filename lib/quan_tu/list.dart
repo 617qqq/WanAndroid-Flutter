@@ -22,8 +22,7 @@ class ListPage extends StatefulWidget {
 class ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    //return buildList();
-    return buildRow(context, 0);
+    return buildList();
   }
 
   double mImgHeight;
@@ -33,6 +32,7 @@ class ListPageState extends State<ListPage> {
   }
 
   Widget buildList() {
+    mImgHeight = MediaQuery.of(context).size.width * 7 / 15;
     return ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: 10,
@@ -42,62 +42,75 @@ class ListPageState extends State<ListPage> {
   }
 
   Widget buildRow(BuildContext listContext, int listIndex) {
-    if (mImgHeight == 0) {
-      mImgHeight = MediaQuery.of(context).size.width * 7 / 5;
+    if(listIndex == 0){
+      return Text(mImgHeight.toString());
     }
     return Column(
       children: <Widget>[
-        Flex(
-          direction: Axis.horizontal,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Image(
-                image: NetworkImage(getRootImgUrl(listIndex, 0)),
-                height: mImgHeight,
+        Container(
+          height: mImgHeight,
+          child: Flex(
+            direction: Axis.horizontal,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Image(
+                  image: NetworkImage(getRootImgUrl(listIndex, 0)),
+                  height: mImgHeight,
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Image(
-                image: NetworkImage(getRootImgUrl(listIndex, 1)),
-                height: mImgHeight,
+              Expanded(
+                flex: 1,
+                child: Image(
+                  image: NetworkImage(getRootImgUrl(listIndex, 1)),
+                  height: mImgHeight,
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Image(
-                image: NetworkImage(getRootImgUrl(listIndex, 2)),
-                height: mImgHeight,
+              Expanded(
+                flex: 1,
+                child: Image(
+                  image: NetworkImage(getRootImgUrl(listIndex, 2)),
+                  height: mImgHeight,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 60,
-            itemBuilder: (BuildContext rowListContext, int rowIndex) {
-              return buildRowList(rowListContext, rowIndex, listIndex);
-            })
+        Container(
+          height: mImgHeight,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 60,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext rowListContext, int rowIndex) {
+                return buildRowList(rowListContext, rowIndex, listIndex);
+              }),
+        )
       ],
     );
   }
 
   Widget buildRowList(BuildContext rowListContext, int rowIndex, int listIndex) {
+    if (mImgHeight == null) {
+      mImgHeight = MediaQuery.of(context).size.width * 7 / 5;
+    }
+    var rowItemWidth = mImgHeight * 5 / 7;
     return Image(
       image: NetworkImage(getUrl(rowIndex, listIndex)),
-      width: mImgHeight * 5 / 7,
+      width: rowItemWidth,
       height: mImgHeight,
     );
   }
 
   String getUrl(int rowIndex, int listIndex) {
-    return mUrl.substring(0, mUrl.indexOf("0.jpg")) + rowIndex.toString() + ".jpg";
+    //return mUrl.substring(0, mUrl.indexOf("0.jpg")) + rowIndex.toString() + ".jpg";
+    return mUrl;
   }
 
   String getRootImgUrl(int listIndex, int i) {
     return mUrl;
   }
 
-  String mUrl = "http://d.quantuwang.co/2019/06/29/16970/0.jpg";
+  String mUrl =
+      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1562574672464&di=c8934d75f252ea1be4977d21caef9417&imgtype=0&src=http%3A%2F%2Fattachments.gfan.net.cn%2Fforum%2F201501%2F12%2F174247ro1osnsoyx17m0ah.jpg";
 }
