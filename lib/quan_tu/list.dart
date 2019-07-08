@@ -22,7 +22,8 @@ class ListPage extends StatefulWidget {
 class ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    return buildList();
+    //return buildList();
+    return buildRow(context, 0);
   }
 
   double mImgHeight;
@@ -41,8 +42,8 @@ class ListPageState extends State<ListPage> {
   }
 
   Widget buildRow(BuildContext listContext, int listIndex) {
-    if(mImgHeight == 0){
-      mImgHeight = MediaQuery.of(context).size.width*7/5;
+    if (mImgHeight == 0) {
+      mImgHeight = MediaQuery.of(context).size.width * 7 / 5;
     }
     return Column(
       children: <Widget>[
@@ -52,27 +53,51 @@ class ListPageState extends State<ListPage> {
             Expanded(
               flex: 1,
               child: Image(
-                image: NetworkImage("http://d.quantuwang.co/2019/06/29/16970/1.jpg"),
+                image: NetworkImage(getRootImgUrl(listIndex, 0)),
                 height: mImgHeight,
               ),
             ),
             Expanded(
               flex: 1,
               child: Image(
-                image: NetworkImage("http://d.quantuwang.co/2019/06/29/16970/1.jpg"),
+                image: NetworkImage(getRootImgUrl(listIndex, 1)),
                 height: mImgHeight,
               ),
             ),
             Expanded(
               flex: 1,
               child: Image(
-                image: NetworkImage("http://d.quantuwang.co/2019/06/29/16970/1.jpg"),
+                image: NetworkImage(getRootImgUrl(listIndex, 2)),
                 height: mImgHeight,
               ),
             ),
           ],
         ),
+        ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 60,
+            itemBuilder: (BuildContext rowListContext, int rowIndex) {
+              return buildRowList(rowListContext, rowIndex, listIndex);
+            })
       ],
     );
   }
+
+  Widget buildRowList(BuildContext rowListContext, int rowIndex, int listIndex) {
+    return Image(
+      image: NetworkImage(getUrl(rowIndex, listIndex)),
+      width: mImgHeight * 5 / 7,
+      height: mImgHeight,
+    );
+  }
+
+  String getUrl(int rowIndex, int listIndex) {
+    return mUrl.substring(0, mUrl.indexOf("0.jpg")) + rowIndex.toString() + ".jpg";
+  }
+
+  String getRootImgUrl(int listIndex, int i) {
+    return mUrl;
+  }
+
+  String mUrl = "http://d.quantuwang.co/2019/06/29/16970/0.jpg";
 }
