@@ -29,6 +29,7 @@ class ListPageState extends State<ListPage> with SingleTickerProviderStateMixin 
   AnimationController controller;
   Animation growHeight, reduceHeight;
   int mSelectedColumn = -1, mSelectedLastColumn = -1, mSelectedRow = -1;
+  double startReduceHeight, startGrowHeight;
 
   void initState() {
     super.initState();
@@ -37,20 +38,21 @@ class ListPageState extends State<ListPage> with SingleTickerProviderStateMixin 
 
   Widget buildList() {
     mImgHeight = MediaQuery.of(context).size.width * 7 / 15;
+
+    reduceHeight = new Tween(
+      begin: startReduceHeight,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Interval(.0, 0.6, curve: Curves.ease)));
+
     growHeight = new Tween(
-      begin: 0.0,
+      begin: startGrowHeight,
       end: mImgHeight,
     ).animate(CurvedAnimation(parent: controller, curve: Interval(.0, 0.6, curve: Curves.ease)))
       ..addListener(() {
-        setState(() {});
+        setState(() {
+        });
       });
-    reduceHeight = new Tween(
-      begin: mImgHeight,
-      end: 0.0,
-    ).animate(CurvedAnimation(parent: controller, curve: Interval(.0, 0.6, curve: Curves.ease)))
-      ..addListener(() {
-        setState(() {});
-      });
+
     return ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: 10,
@@ -61,7 +63,7 @@ class ListPageState extends State<ListPage> with SingleTickerProviderStateMixin 
 
   Widget buildRowItem(BuildContext listContext, int listIndex) {
     if (listIndex == 0) {
-      return Text(mSelectedColumn.toString());
+      return Text("2");
     }
     return Column(
       children: <Widget>[
@@ -74,12 +76,20 @@ class ListPageState extends State<ListPage> with SingleTickerProviderStateMixin 
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() async {
-                      mSelectedLastColumn = mSelectedColumn;
-                      mSelectedColumn = listIndex;
-                      controller.reset();
-                      controller.forward();
-                    });
+                    if (mSelectedColumn == listIndex) {
+                      return;
+                    } else {
+                      setState(() {
+                        //变小动画的高度，如果变大到一半选择其他栏，则从当前高度缩小
+                        startReduceHeight = growHeight.value;
+                        //变大动画的高度，如果选中栏为正在缩小栏
+                        startGrowHeight = mSelectedLastColumn == listIndex ? reduceHeight.value : 0.0;
+                        mSelectedLastColumn = mSelectedColumn;
+                        mSelectedColumn = listIndex;
+                        controller.reset();
+                        controller.forward();
+                      });
+                    }
                   },
                   child: Image(
                     image: NetworkImage(getRootImgUrl(listIndex, 0)),
