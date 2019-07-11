@@ -25,4 +25,14 @@ flutter:
     - images/ic_launcher_round.png
     - images/ic_arrow_down.png
     - images/bg.png
+    - images/bg_rect_shadow.png
+    - images/bg_rect_10_shadow_yellow.png
+    - images/ic_coupon_attractive.png
+    - images/ic_coupon_msg_1.png
+    - images/ic_coupon_msg_2.png
+    - images/ic_coupon_msg_3.png
+    - images/ic_status_used.png
+    - images/bg_coupon_send_default.png
+    - images/ic_see_white.png
+    - images/ic_arrow_down_shadow.png
 
